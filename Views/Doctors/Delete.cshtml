@@ -1,0 +1,228 @@
+@model BeykentHospitalAppointment.Models.Doctor
+
+@{
+    ViewData["Title"] = "Doktor Sil";
+
+    bool hasSessions = ViewBag.HasSessions == true;
+    bool hasAppointments = ViewBag.HasAppointments == true;
+    bool cannotDelete = hasSessions || hasAppointments;
+}
+
+<style>
+    .delete-page {
+        padding: 34px 0 20px;
+    }
+
+    .delete-header {
+        background: linear-gradient(135deg, #0f2d4a 0%, #174ea6 100%);
+        color: white;
+        border-radius: 30px;
+        padding: 34px;
+        box-shadow: 0 24px 60px rgba(21, 64, 105, 0.16);
+        margin-bottom: 24px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .delete-header::before {
+        content: "";
+        position: absolute;
+        width: 230px;
+        height: 230px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 50%;
+        right: -80px;
+        top: -80px;
+    }
+
+    .delete-header h1 {
+        color: white;
+        margin: 0 0 10px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .delete-header p {
+        color: #d9e8ff;
+        margin: 0;
+        line-height: 1.65;
+        max-width: 780px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .delete-card-modern {
+        background: #ffffff;
+        border: 1px solid #dbe8f4;
+        border-radius: 28px;
+        box-shadow: 0 18px 44px rgba(21, 64, 105, 0.09);
+        padding: 34px;
+        max-width: 860px;
+    }
+
+    .delete-warning-box {
+        border-radius: 20px;
+        padding: 18px;
+        margin-bottom: 24px;
+        font-weight: 800;
+        line-height: 1.6;
+    }
+
+    .blocked-box {
+        background: #fff4d6;
+        color: #8a5a00;
+    }
+
+    .danger-box {
+        background: #fde8e7;
+        color: #b42318;
+    }
+
+    .delete-row-modern {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 18px;
+        padding: 18px 0;
+        border-bottom: 1px solid #edf3f8;
+    }
+
+    .delete-row-modern:last-child {
+        border-bottom: none;
+    }
+
+    .delete-label {
+        color: #102a43;
+        font-weight: 950;
+    }
+
+    .delete-value {
+        color: #60758a;
+        font-weight: 700;
+        line-height: 1.6;
+    }
+
+    .delete-name {
+        color: #174ea6;
+        font-weight: 950;
+    }
+
+    .department-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #e9f2ff;
+        color: #174ea6;
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-weight: 900;
+    }
+
+    .amount-value {
+        color: #174ea6;
+        font-weight: 950;
+    }
+
+    .delete-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 26px;
+    }
+
+    @@media (max-width: 768px) {
+        .delete-card-modern {
+            padding: 26px;
+        }
+
+        .delete-row-modern {
+            grid-template-columns: 1fr;
+            gap: 6px;
+        }
+
+        .delete-header {
+            padding: 28px;
+        }
+    }
+</style>
+
+<section class="delete-page">
+    <div class="delete-header">
+        <h1>Doktor Sil</h1>
+
+        <p>
+            Doktor silme işlemi yalnızca ilgili doktora bağlı seans veya randevu bulunmadığında yapılabilir.
+        </p>
+    </div>
+
+    <div class="delete-card-modern">
+        @if (cannotDelete)
+        {
+            <div class="delete-warning-box blocked-box">
+                Bu doktora bağlı seans veya randevu bulunduğu için doktor silinemez.
+                Önce bu doktora bağlı seansları silmeniz gerekir. Eğer doktora ait alınmış randevu varsa doktor kaydı korunmalıdır.
+            </div>
+        }
+        else
+        {
+            <div class="delete-warning-box danger-box">
+                Bu doktoru silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.
+            </div>
+        }
+
+        <div class="delete-row-modern">
+            <div class="delete-label">Doktor Adı Soyadı</div>
+            <div class="delete-value delete-name">@Model.FullName</div>
+        </div>
+
+        <div class="delete-row-modern">
+            <div class="delete-label">Uzmanlık</div>
+            <div class="delete-value">@Model.Specialty</div>
+        </div>
+
+        <div class="delete-row-modern">
+            <div class="delete-label">Branş</div>
+            <div class="delete-value">
+                <span class="department-pill">
+                    @(Model.Department?.Name ?? "-")
+                </span>
+            </div>
+        </div>
+
+        <div class="delete-row-modern">
+            <div class="delete-label">Açıklama</div>
+            <div class="delete-value">@Model.Description</div>
+        </div>
+
+        <div class="delete-row-modern">
+            <div class="delete-label">Muayene Ücreti</div>
+            <div class="delete-value amount-value">@Model.ExaminationFee.ToString("N2") TL</div>
+        </div>
+
+        @if (!cannotDelete)
+        {
+            <form asp-action="Delete" method="post">
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" asp-for="Id" />
+
+                <div class="delete-actions">
+                    <button type="submit" class="btn btn-danger">
+                        Sil
+                    </button>
+
+                    <a asp-action="Index" class="btn btn-secondary">
+                        Vazgeç
+                    </a>
+                </div>
+            </form>
+        }
+        else
+        {
+            <div class="delete-actions">
+                <a asp-action="Index" class="btn btn-secondary">
+                    Listeye Dön
+                </a>
+            </div>
+        }
+    </div>
+</section>

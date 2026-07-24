@@ -1,0 +1,363 @@
+@model IEnumerable<BeykentHospitalAppointment.Models.Appointment>
+
+@{
+    ViewData["Title"] = ViewBag.PageTitle ?? "Randevular";
+    bool isAdminView = ViewBag.IsAdminView == true;
+}
+
+<style>
+    .appointments-page {
+        padding: 34px 0 20px;
+    }
+
+    .appointments-header {
+        background: linear-gradient(135deg, #0f2d4a 0%, #174ea6 100%);
+        color: white;
+        border-radius: 30px;
+        padding: 36px;
+        box-shadow: 0 24px 60px rgba(21, 64, 105, 0.16);
+        margin-bottom: 26px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .appointments-header::before {
+        content: "";
+        position: absolute;
+        width: 240px;
+        height: 240px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
+        right: -80px;
+        top: -80px;
+    }
+
+    .appointments-header h1 {
+        color: white;
+        margin: 0 0 10px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .appointments-header p {
+        color: #d9e8ff;
+        margin: 0;
+        max-width: 780px;
+        line-height: 1.65;
+        position: relative;
+        z-index: 2;
+    }
+
+    .appointments-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+    }
+
+    .appointments-summary {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: #ffffff;
+        border: 1px solid #dbe8f4;
+        border-radius: 18px;
+        padding: 13px 18px;
+        color: #60758a;
+        font-weight: 800;
+        box-shadow: 0 12px 30px rgba(21, 64, 105, 0.07);
+    }
+
+    .appointments-summary strong {
+        color: #174ea6;
+    }
+
+    .appointments-table-card {
+        background: #ffffff;
+        border: 1px solid #dbe8f4;
+        border-radius: 28px;
+        box-shadow: 0 18px 44px rgba(21, 64, 105, 0.09);
+        overflow: hidden;
+    }
+
+    .appointments-table {
+        width: 100%;
+        margin: 0;
+        border-collapse: collapse;
+    }
+
+    .appointments-table thead {
+        background: #102a43;
+        color: white;
+    }
+
+    .appointments-table th {
+        padding: 18px 16px;
+        font-weight: 900;
+        white-space: nowrap;
+        border: none;
+    }
+
+    .appointments-table td {
+        padding: 18px 16px;
+        vertical-align: middle;
+        border-bottom: 1px solid #edf3f8;
+        color: #27364a;
+        font-weight: 600;
+    }
+
+    .appointments-table tbody tr:nth-child(odd) {
+        background: #f8fbff;
+    }
+
+    .appointments-table tbody tr:hover {
+        background: #eef5ff;
+    }
+
+    .doctor-name {
+        font-weight: 900;
+        color: #102a43;
+    }
+
+    .muted-cell {
+        color: #60758a;
+        font-weight: 700;
+    }
+
+    .amount-cell {
+        font-weight: 950;
+        color: #174ea6;
+        white-space: nowrap;
+    }
+
+    .status-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-weight: 900;
+        font-size: 0.86rem;
+        background: #e9fbf7;
+        color: #12937c;
+    }
+
+    .payment-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-weight: 900;
+        font-size: 0.86rem;
+        background: #e9f2ff;
+        color: #174ea6;
+        white-space: nowrap;
+    }
+
+    .empty-appointments {
+        background: #ffffff;
+        border: 1px solid #dbe8f4;
+        border-radius: 28px;
+        padding: 42px;
+        text-align: center;
+        box-shadow: 0 18px 44px rgba(21, 64, 105, 0.09);
+    }
+
+    .empty-appointments h4 {
+        color: #102a43;
+        font-weight: 950;
+        margin-bottom: 10px;
+    }
+
+    .empty-appointments p {
+        color: #60758a;
+        margin-bottom: 22px;
+    }
+
+    .cancel-button {
+        border: none;
+        border-radius: 14px;
+        background: #d92d20;
+        color: white;
+        padding: 9px 14px;
+        font-weight: 900;
+        transition: 0.2s ease;
+    }
+
+    .cancel-button:hover {
+        background: #b42318;
+        transform: translateY(-1px);
+    }
+
+    @@media (max-width: 900px) {
+        .appointments-header {
+            padding: 28px;
+        }
+
+        .appointments-table-card {
+            overflow-x: auto;
+        }
+
+        .appointments-table {
+            min-width: 950px;
+        }
+    }
+</style>
+
+<section class="appointments-page">
+    <div class="appointments-header">
+        <h1>@ViewData["Title"]</h1>
+
+        @if (isAdminView)
+        {
+            <p>
+                Admin paneli üzerinden sistemde oluşturulan tüm hasta randevuları görüntülenmektedir.
+                Admin kullanıcı hasta adına randevu oluşturamaz veya randevu iptal edemez.
+            </p>
+        }
+        else
+        {
+            <p>
+                Almış olduğunuz randevular aşağıda listelenmektedir. Yeni randevu oluşturabilir
+                veya aktif randevunuzu iptal edebilirsiniz.
+            </p>
+        }
+    </div>
+
+    <div class="appointments-toolbar">
+        <div class="appointments-summary">
+            Toplam kayıt:
+            <strong>@Model.Count()</strong>
+        </div>
+
+        @if (!isAdminView)
+        {
+            <a asp-action="ChooseDepartment" class="btn btn-primary">
+                Yeni Randevu Al
+            </a>
+        }
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="empty-appointments">
+            <h4>Henüz randevu kaydı bulunmamaktadır.</h4>
+
+            @if (isAdminView)
+            {
+                <p>
+                    Hastalar randevu oluşturduğunda bu sayfada listelenecektir.
+                </p>
+            }
+            else
+            {
+                <p>
+                    Randevu almak için branş, doktor ve uygun seans seçimi yapabilirsiniz.
+                </p>
+
+                <a asp-action="ChooseDepartment" class="btn btn-primary">
+                    Randevu Al
+                </a>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="appointments-table-card">
+            <table class="appointments-table">
+                <thead>
+                    <tr>
+                        @if (isAdminView)
+                        {
+                            <th>Hasta</th>
+                        }
+
+                        <th>Branş</th>
+                        <th>Doktor</th>
+                        <th>Tarih</th>
+                        <th>Saat</th>
+                        <th>Durum</th>
+                        <th>Ödeme Tipi</th>
+                        <th>Ödeme Durumu</th>
+                        <th>Tutar</th>
+
+                        @if (!isAdminView)
+                        {
+                            <th>İşlem</th>
+                        }
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var appointment in Model)
+                    {
+                        <tr>
+                            @if (isAdminView)
+                            {
+                                <td class="doctor-name">
+                                    @(appointment.Patient?.FullName ?? "-")
+                                </td>
+                            }
+
+                            <td>@(appointment.Doctor?.Department?.Name ?? "-")</td>
+
+                            <td>
+                                <span class="doctor-name">
+                                    @(appointment.Doctor?.FullName ?? "-")
+                                </span>
+                            </td>
+
+                            <td class="muted-cell">
+                                @appointment.AppointmentDate.ToString("dd.MM.yyyy")
+                            </td>
+
+                            <td class="muted-cell">
+                                @(appointment.DoctorSession?.StartTime.ToString(@"hh\:mm") ?? "-")
+                            </td>
+
+                            <td>
+                                <span class="status-pill">
+                                    @appointment.Status
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="payment-pill">
+                                    @(appointment.Payment?.PaymentType ?? "-")
+                                </span>
+                            </td>
+
+                            <td class="muted-cell">
+                                @(appointment.Payment?.PaymentStatus ?? "-")
+                            </td>
+
+                            <td class="amount-cell">
+                                @(appointment.Payment != null ? appointment.Payment.Amount.ToString("N2") + " TL" : "-")
+                            </td>
+
+                            @if (!isAdminView)
+                            {
+                                <td>
+                                    <form asp-action="Cancel" method="post" style="display:inline;">
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden" name="id" value="@appointment.Id" />
+
+                                        <button type="submit"
+                                                class="cancel-button"
+                                                onclick="return confirm('Bu randevuyu iptal etmek istediğinizden emin misiniz?');">
+                                            İptal Et
+                                        </button>
+                                    </form>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>

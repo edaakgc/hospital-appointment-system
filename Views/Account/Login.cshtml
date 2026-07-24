@@ -1,0 +1,299 @@
+@{
+    ViewData["Title"] = "Giriş Yap";
+}
+
+<style>
+    .auth-page {
+        min-height: calc(100vh - 190px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 45px 0;
+    }
+
+    .auth-wrapper {
+        width: 100%;
+        max-width: 980px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        background: #ffffff;
+        border: 1px solid #dbe8f4;
+        border-radius: 34px;
+        overflow: hidden;
+        box-shadow: 0 28px 70px rgba(21, 64, 105, 0.13);
+    }
+
+    .auth-info {
+        background: linear-gradient(135deg, #0f2d4a 0%, #174ea6 100%);
+        color: white;
+        padding: 52px 48px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .auth-info::before {
+        content: "";
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 50%;
+        right: -90px;
+        top: -90px;
+    }
+
+    .auth-info::after {
+        content: "";
+        position: absolute;
+        width: 190px;
+        height: 190px;
+        background: rgba(255, 255, 255, 0.07);
+        border-radius: 50%;
+        left: -70px;
+        bottom: -70px;
+    }
+
+    .auth-info-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .auth-badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        padding: 8px 15px;
+        border-radius: 999px;
+        font-weight: 900;
+        margin-bottom: 24px;
+        color: #ffffff;
+    }
+
+    .auth-info-title {
+        color: #ffffff !important;
+        font-size: 2.35rem;
+        font-weight: 950;
+        letter-spacing: -0.9px;
+        line-height: 1.15;
+        margin-bottom: 20px;
+    }
+
+    .auth-info-text {
+        color: #d9e8ff;
+        line-height: 1.75;
+        font-size: 1.02rem;
+        margin-bottom: 34px;
+    }
+
+    .auth-features {
+        display: grid;
+        gap: 16px;
+    }
+
+    .auth-feature {
+        display: flex;
+        gap: 13px;
+        align-items: center;
+        color: #eef6ff;
+        font-weight: 800;
+    }
+
+    .auth-dot {
+        width: 12px;
+        height: 12px;
+        background: #24c6a7;
+        border-radius: 50%;
+        box-shadow: 0 0 0 7px rgba(36, 198, 167, 0.15);
+        flex: 0 0 auto;
+    }
+
+    .auth-form-area {
+        padding: 52px 48px;
+        background: #ffffff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .auth-form-area h1 {
+        font-size: 2.35rem;
+        font-weight: 950;
+        color: #102a43;
+        letter-spacing: -0.7px;
+        margin-bottom: 10px;
+    }
+
+    .auth-subtitle {
+        color: #60758a;
+        line-height: 1.6;
+        margin-bottom: 28px;
+        font-weight: 600;
+    }
+
+    .auth-label {
+        font-weight: 850;
+        color: #102a43;
+        margin-bottom: 8px;
+    }
+
+    .auth-input {
+        border-radius: 16px;
+        border: 1px solid #cfe0ee;
+        padding: 14px 16px;
+        font-size: 1rem;
+        background: #fbfdff;
+    }
+
+    .auth-input:focus {
+        border-color: #174ea6;
+        box-shadow: 0 0 0 4px rgba(23, 78, 166, 0.12);
+    }
+
+    .auth-button {
+        width: 100%;
+        border: none;
+        border-radius: 16px;
+        background: #174ea6;
+        color: white;
+        padding: 14px 20px;
+        font-weight: 900;
+        font-size: 1.02rem;
+        box-shadow: 0 16px 30px rgba(23, 78, 166, 0.22);
+        transition: 0.2s ease;
+    }
+
+    .auth-button:hover {
+        background: #123f86;
+        transform: translateY(-1px);
+    }
+
+    .auth-bottom {
+        margin-top: 24px;
+        text-align: center;
+        color: #60758a;
+        font-weight: 700;
+    }
+
+    .auth-bottom a {
+        color: #174ea6;
+        font-weight: 950;
+        text-decoration: none;
+    }
+
+    .auth-bottom a:hover {
+        text-decoration: underline;
+    }
+
+    .auth-alert {
+        border-radius: 16px;
+        padding: 14px 16px;
+        font-weight: 800;
+    }
+
+    @@media (max-width: 900px) {
+        .auth-wrapper {
+            grid-template-columns: 1fr;
+        }
+
+        .auth-info {
+            padding: 36px;
+        }
+
+        .auth-form-area {
+            padding: 36px;
+        }
+
+        .auth-info-title {
+            font-size: 2rem;
+        }
+    }
+</style>
+
+<div class="auth-page">
+    <div class="auth-wrapper">
+
+        <div class="auth-info">
+            <div class="auth-info-content">
+                <span class="auth-badge">Beykent Medikal</span>
+
+                <h2 class="auth-info-title">
+                    Randevu sistemine güvenli giriş
+                </h2>
+
+                <p class="auth-info-text">
+                    Hasta hesabınızla giriş yaparak randevu alabilir, mevcut randevularınızı
+                    görüntüleyebilir ve gerektiğinde randevu iptali gerçekleştirebilirsiniz.
+                </p>
+
+                <div class="auth-features">
+                    <div class="auth-feature">
+                        <span class="auth-dot"></span>
+                        <span>Branş, doktor ve seans seçimi</span>
+                    </div>
+
+                    <div class="auth-feature">
+                        <span class="auth-dot"></span>
+                        <span>Online veya hastanede ödeme tercihi</span>
+                    </div>
+
+                    <div class="auth-feature">
+                        <span class="auth-dot"></span>
+                        <span>Randevu geçmişi ve iptal işlemleri</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="auth-form-area">
+            <h1>Giriş Yap</h1>
+
+            <p class="auth-subtitle">
+                Randevu işlemlerinize devam etmek için hesabınıza giriş yapın.
+            </p>
+
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="alert alert-danger auth-alert">
+                    @ViewBag.ErrorMessage
+                </div>
+            }
+
+            <form asp-action="Login" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="mb-3">
+                    <label class="form-label auth-label">E-posta</label>
+                    <input type="email"
+                           name="email"
+                           class="form-control auth-input"
+                           required
+                           placeholder="ornek@mail.com" />
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label auth-label">Şifre</label>
+                    <input type="password"
+                           name="password"
+                           class="form-control auth-input"
+                           required
+                           placeholder="Şifrenizi giriniz" />
+                </div>
+
+                <button type="submit" class="auth-button">
+                    Giriş Yap
+                </button>
+            </form>
+
+            <div class="auth-bottom">
+                <span>Hesabınız yok mu?</span>
+                <a asp-controller="Account" asp-action="Register">
+                    Kayıt Ol
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>

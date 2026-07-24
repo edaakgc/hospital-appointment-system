@@ -1,0 +1,270 @@
+@{
+    ViewData["Title"] = "Admin Panel";
+}
+
+<style>
+    .admin-dashboard {
+        padding: 42px 0 20px;
+    }
+
+    .admin-hero {
+        background: linear-gradient(135deg, #0f2d4a 0%, #174ea6 100%);
+        color: white;
+        border-radius: 34px;
+        padding: 48px;
+        box-shadow: 0 28px 70px rgba(21, 64, 105, 0.18);
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
+
+    .admin-hero::before {
+        content: "";
+        position: absolute;
+        width: 280px;
+        height: 280px;
+        background: rgba(255, 255, 255, 0.09);
+        border-radius: 50%;
+        right: -90px;
+        top: -90px;
+    }
+
+    .admin-hero h1 {
+        color: white;
+        font-weight: 950;
+        letter-spacing: -1px;
+        margin-bottom: 14px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .admin-hero p {
+        color: #d9e8ff;
+        max-width: 760px;
+        line-height: 1.7;
+        margin-bottom: 0;
+        position: relative;
+        z-index: 2;
+    }
+
+    .admin-badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        padding: 8px 15px;
+        border-radius: 999px;
+        font-weight: 900;
+        margin-bottom: 18px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .admin-stat-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+        margin-bottom: 30px;
+    }
+
+    .admin-stat-card {
+        background: #ffffff;
+        border: 1px solid #dbe8f4;
+        border-radius: 26px;
+        padding: 26px;
+        box-shadow: 0 18px 44px rgba(21, 64, 105, 0.09);
+        text-align: center;
+    }
+
+    .admin-stat-card h2 {
+        color: #174ea6;
+        font-weight: 950;
+        font-size: 2.25rem;
+        margin-bottom: 6px;
+    }
+
+    .admin-stat-card p {
+        color: #60758a;
+        font-weight: 800;
+        margin-bottom: 0;
+    }
+
+    .admin-action-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 22px;
+    }
+
+    .admin-action-card {
+        background: #ffffff;
+        border: 1px solid #dbe8f4;
+        border-radius: 28px;
+        padding: 32px;
+        box-shadow: 0 18px 44px rgba(21, 64, 105, 0.09);
+        transition: 0.2s ease;
+        height: 100%;
+    }
+
+    .admin-action-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 24px 55px rgba(21, 64, 105, 0.13);
+    }
+
+    .admin-card-label {
+        display: inline-block;
+        background: #e9f2ff;
+        color: #174ea6;
+        padding: 7px 13px;
+        border-radius: 999px;
+        font-weight: 900;
+        font-size: 0.86rem;
+        margin-bottom: 16px;
+    }
+
+    .admin-action-card h4 {
+        color: #102a43;
+        font-weight: 950;
+        margin-bottom: 12px;
+    }
+
+    .admin-action-card p {
+        color: #60758a;
+        line-height: 1.65;
+        margin-bottom: 24px;
+    }
+
+    .admin-action-btn {
+        display: inline-block;
+        background: #174ea6;
+        color: white;
+        text-decoration: none;
+        padding: 13px 22px;
+        border-radius: 15px;
+        font-weight: 900;
+        box-shadow: 0 14px 26px rgba(23, 78, 166, 0.20);
+        transition: 0.2s ease;
+    }
+
+    .admin-action-btn:hover {
+        background: #123f86;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    @@media (max-width: 950px) {
+        .admin-stat-grid,
+        .admin-action-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .admin-hero {
+            padding: 34px;
+        }
+    }
+</style>
+
+<section class="admin-dashboard">
+    <div class="admin-hero">
+        <span class="admin-badge">Yönetim Paneli</span>
+
+        <h1>Beykent Medikal Admin Paneli</h1>
+
+        <p>
+            Bu panel, hastane randevu sistemindeki temel yönetim işlemlerinin tek merkezden
+            yürütülmesi için hazırlanmıştır. Admin kullanıcı; branş, doktor, seans ve randevu
+            kayıtlarını bu ekran üzerinden takip edebilir.
+        </p>
+    </div>
+
+    <div class="admin-stat-grid">
+        <div class="admin-stat-card">
+            <h2>@ViewBag.DepartmentCount</h2>
+            <p>Toplam Branş</p>
+        </div>
+
+        <div class="admin-stat-card">
+            <h2>@ViewBag.DoctorCount</h2>
+            <p>Toplam Doktor</p>
+        </div>
+
+        <div class="admin-stat-card">
+            <h2>@ViewBag.SessionCount</h2>
+            <p>Toplam Seans</p>
+        </div>
+
+        <div class="admin-stat-card">
+            <h2>@ViewBag.AppointmentCount</h2>
+            <p>Toplam Randevu</p>
+        </div>
+    </div>
+
+    <div class="admin-action-grid">
+        <div class="admin-action-card">
+            <span class="admin-card-label">Branş İşlemleri</span>
+
+            <h4>Branş Yönetimi</h4>
+
+            <p>
+                Hastanede hizmet verilen branşlar bu bölümden yönetilir. Admin kullanıcı
+                yeni branş ekleyebilir, mevcut branş bilgilerini güncelleyebilir ve uygun
+                durumda branş kaydını silebilir.
+            </p>
+
+            <a asp-controller="Departments"
+               asp-action="Index"
+               class="admin-action-btn">
+                Branşları Yönet
+            </a>
+        </div>
+
+        <div class="admin-action-card">
+            <span class="admin-card-label">Doktor İşlemleri</span>
+
+            <h4>Doktor Yönetimi</h4>
+
+            <p>
+                Doktor kayıtları bu bölümden takip edilir. Admin kullanıcı doktor bilgilerini,
+                uzmanlık alanını, bağlı olduğu branşı ve muayene ücretini yönetebilir.
+            </p>
+
+            <a asp-controller="Doctors"
+               asp-action="Index"
+               class="admin-action-btn">
+                Doktorları Yönet
+            </a>
+        </div>
+
+        <div class="admin-action-card">
+            <span class="admin-card-label">Seans İşlemleri</span>
+
+            <h4>Seans Yönetimi</h4>
+
+            <p>
+                Doktorlara ait uygun tarih ve saat aralıkları bu bölümden oluşturulur.
+                Hasta tarafında yalnızca müsait durumdaki seanslar randevu için görüntülenir.
+            </p>
+
+            <a asp-controller="DoctorSessions"
+               asp-action="Index"
+               class="admin-action-btn">
+                Seansları Yönet
+            </a>
+        </div>
+
+        <div class="admin-action-card">
+            <span class="admin-card-label">Randevu Takibi</span>
+
+            <h4>Tüm Randevular</h4>
+
+            <p>
+                Hastalar tarafından oluşturulan randevular bu bölümde listelenir.
+                Admin kullanıcı randevuları takip edebilir ancak hasta adına yeni randevu oluşturamaz.
+            </p>
+
+            <a asp-controller="PatientAppointments"
+               asp-action="Index"
+               class="admin-action-btn">
+                Tüm Randevuları Gör
+            </a>
+        </div>
+    </div>
+</section>

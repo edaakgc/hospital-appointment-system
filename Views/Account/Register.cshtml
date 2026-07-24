@@ -1,0 +1,318 @@
+@{
+    ViewData["Title"] = "Kayıt Ol";
+}
+
+<style>
+    .auth-page {
+        min-height: calc(100vh - 190px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 45px 0;
+    }
+
+    .auth-wrapper {
+        width: 100%;
+        max-width: 1040px;
+        display: grid;
+        grid-template-columns: 0.92fr 1.08fr;
+        background: #ffffff;
+        border: 1px solid #dbe8f4;
+        border-radius: 34px;
+        overflow: hidden;
+        box-shadow: 0 28px 70px rgba(21, 64, 105, 0.13);
+    }
+
+    .auth-info {
+        background: linear-gradient(135deg, #0f2d4a 0%, #174ea6 100%);
+        color: white;
+        padding: 48px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .auth-badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        padding: 8px 15px;
+        border-radius: 999px;
+        font-weight: 800;
+        margin-bottom: 22px;
+    }
+
+    .auth-info h2 {
+        font-size: 2.25rem;
+        font-weight: 950;
+        letter-spacing: -0.8px;
+        margin-bottom: 18px;
+    }
+
+    .auth-info p {
+        color: #d9e8ff;
+        line-height: 1.75;
+        font-size: 1.02rem;
+    }
+
+    .auth-features {
+        margin-top: 32px;
+        display: grid;
+        gap: 14px;
+    }
+
+    .auth-feature {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        color: #eef6ff;
+        font-weight: 700;
+    }
+
+    .auth-dot {
+        width: 12px;
+        height: 12px;
+        background: #24c6a7;
+        border-radius: 50%;
+        box-shadow: 0 0 0 7px rgba(36, 198, 167, 0.15);
+        flex: 0 0 auto;
+    }
+
+    .auth-form-area {
+        padding: 48px;
+        background: #ffffff;
+    }
+
+    .auth-form-area h1 {
+        font-size: 2.25rem;
+        font-weight: 950;
+        color: #102a43;
+        letter-spacing: -0.7px;
+        margin-bottom: 10px;
+    }
+
+    .auth-subtitle {
+        color: #60758a;
+        line-height: 1.6;
+        margin-bottom: 26px;
+    }
+
+    .auth-label {
+        font-weight: 800;
+        color: #102a43;
+        margin-bottom: 8px;
+    }
+
+    .auth-input {
+        border-radius: 16px;
+        border: 1px solid #cfe0ee;
+        padding: 14px 16px;
+        font-size: 1rem;
+        background: #fbfdff;
+    }
+
+    .auth-input:focus {
+        border-color: #174ea6;
+        box-shadow: 0 0 0 4px rgba(23, 78, 166, 0.12);
+    }
+
+    .auth-button {
+        width: 100%;
+        border: none;
+        border-radius: 16px;
+        background: #174ea6;
+        color: white;
+        padding: 14px 20px;
+        font-weight: 900;
+        font-size: 1.02rem;
+        box-shadow: 0 16px 30px rgba(23, 78, 166, 0.22);
+        transition: 0.2s ease;
+    }
+
+    .auth-button:hover {
+        background: #123f86;
+        transform: translateY(-1px);
+    }
+
+    .auth-bottom {
+        margin-top: 22px;
+        text-align: center;
+        color: #60758a;
+        font-weight: 600;
+    }
+
+    .auth-bottom a {
+        color: #174ea6;
+        font-weight: 900;
+        text-decoration: none;
+    }
+
+    .auth-bottom a:hover {
+        text-decoration: underline;
+    }
+
+    .auth-alert {
+        border-radius: 16px;
+        padding: 14px 16px;
+        font-weight: 700;
+    }
+
+    .auth-note {
+        margin-top: 28px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        padding: 18px;
+        color: #e9f5ff;
+        line-height: 1.6;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .form-grid .full {
+        grid-column: 1 / -1;
+    }
+
+    @@media (max-width: 900px) {
+        .auth-wrapper {
+            grid-template-columns: 1fr;
+        }
+
+        .auth-info {
+            padding: 34px;
+        }
+
+        .auth-form-area {
+            padding: 34px;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .form-grid .full {
+            grid-column: auto;
+        }
+    }
+</style>
+
+<div class="auth-page">
+    <div class="auth-wrapper">
+
+        <div class="auth-info">
+            <div>
+                <span class="auth-badge">Yeni Hasta Kaydı</span>
+
+                <h2>Beykent Medikal hesabınızı oluşturun</h2>
+
+                <p>
+                    Hasta kaydınızı oluşturarak sisteme giriş yapabilir, size uygun doktor ve seans
+                    seçimiyle online randevu alabilirsiniz.
+                </p>
+
+                <div class="auth-features">
+                    <div class="auth-feature">
+                        <span class="auth-dot"></span>
+                        <span>Hasta bilgileriyle hızlı kayıt</span>
+                    </div>
+
+                    <div class="auth-feature">
+                        <span class="auth-dot"></span>
+                        <span>Randevu alma ve takip süreci</span>
+                    </div>
+
+                    <div class="auth-feature">
+                        <span class="auth-dot"></span>
+                        <span>Ödeme tipi seçimi ve randevu özeti</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="auth-note">
+                Kayıt olan kullanıcılar sistemde otomatik olarak
+                <strong>Hasta</strong> rolüyle oluşturulur.
+            </div>
+        </div>
+
+        <div class="auth-form-area">
+            <h1>Kayıt Ol</h1>
+
+            <p class="auth-subtitle">
+                Randevu sistemini kullanabilmek için hasta hesabınızı oluşturun.
+            </p>
+
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="alert alert-danger auth-alert">
+                    @ViewBag.ErrorMessage
+                </div>
+            }
+
+            <form asp-action="Register" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="form-grid">
+                    <div class="full">
+                        <label class="form-label auth-label">Ad Soyad</label>
+                        <input type="text"
+                               name="fullName"
+                               class="form-control auth-input"
+                               required
+                               placeholder="Örn: Edanur Akgüç" />
+                    </div>
+
+                    <div class="full">
+                        <label class="form-label auth-label">E-posta</label>
+                        <input type="email"
+                               name="email"
+                               class="form-control auth-input"
+                               required
+                               placeholder="ornek@mail.com" />
+                    </div>
+
+                    <div>
+                        <label class="form-label auth-label">Şifre</label>
+                        <input type="password"
+                               name="password"
+                               class="form-control auth-input"
+                               required
+                               placeholder="Şifrenizi giriniz" />
+                    </div>
+
+                    <div>
+                        <label class="form-label auth-label">Telefon Numarası</label>
+                        <input type="text"
+                               name="phoneNumber"
+                               class="form-control auth-input"
+                               required
+                               placeholder="05550000000" />
+                    </div>
+
+                    <div class="full">
+                        <label class="form-label auth-label">TC Kimlik Numarası</label>
+                        <input type="text"
+                               name="identityNumber"
+                               class="form-control auth-input"
+                               placeholder="İsteğe bağlı" />
+                    </div>
+                </div>
+
+                <button type="submit" class="auth-button mt-4">
+                    Kayıt Ol
+                </button>
+            </form>
+
+            <div class="auth-bottom">
+                <span>Zaten hesabınız var mı?</span>
+                <a asp-controller="Account" asp-action="Login">
+                    Giriş Yap
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>

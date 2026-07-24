@@ -1,0 +1,348 @@
+@model IEnumerable<BeykentHospitalAppointment.Models.DoctorSession>
+
+@{
+    ViewData["Title"] = "Seans Yönetimi";
+
+    int totalSessions = Model.Count();
+    int availableSessions = Model.Count(s => s.IsAvailable);
+    int busySessions = Model.Count(s => !s.IsAvailable);
+}
+
+<style>
+    .management-page {
+        padding: 34px 0 20px;
+    }
+
+    .management-header {
+        background: linear-gradient(135deg, #0f2d4a 0%, #174ea6 100%);
+        color: white;
+        border-radius: 30px;
+        padding: 36px;
+        box-shadow: 0 24px 60px rgba(21, 64, 105, 0.16);
+        margin-bottom: 24px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .management-header::before {
+        content: "";
+        position: absolute;
+        width: 240px;
+        height: 240px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
+        right: -80px;
+        top: -80px;
+    }
+
+    .management-header h1 {
+        color: white;
+        margin: 0 0 10px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .management-header p {
+        color: #d9e8ff;
+        max-width: 820px;
+        line-height: 1.65;
+        margin: 0;
+        position: relative;
+        z-index: 2;
+    }
+
+    .management-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+    }
+
+    .summary-group {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .management-summary {
+        background: #ffffff;
+        border: 1px solid #dbe8f4;
+        border-radius: 18px;
+        padding: 13px 18px;
+        color: #60758a;
+        font-weight: 800;
+        box-shadow: 0 12px 30px rgba(21, 64, 105, 0.07);
+    }
+
+    .management-summary strong {
+        color: #174ea6;
+    }
+
+    .management-table-card {
+        background: #ffffff;
+        border: 1px solid #dbe8f4;
+        border-radius: 28px;
+        box-shadow: 0 18px 44px rgba(21, 64, 105, 0.09);
+        overflow: hidden;
+    }
+
+    .management-table {
+        width: 100%;
+        margin: 0;
+        border-collapse: collapse;
+    }
+
+    .management-table thead {
+        background: #102a43;
+        color: white;
+    }
+
+    .management-table th {
+        padding: 18px 16px;
+        font-weight: 900;
+        border: none;
+        white-space: nowrap;
+    }
+
+    .management-table td {
+        padding: 18px 16px;
+        vertical-align: middle;
+        border-bottom: 1px solid #edf3f8;
+        color: #27364a;
+        font-weight: 600;
+    }
+
+    .management-table tbody tr:nth-child(odd) {
+        background: #f8fbff;
+    }
+
+    .management-table tbody tr:hover {
+        background: #eef5ff;
+    }
+
+    .name-cell {
+        font-weight: 950;
+        color: #102a43;
+        white-space: nowrap;
+    }
+
+    .muted-cell {
+        color: #60758a;
+        font-weight: 700;
+    }
+
+    .department-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #e9f2ff;
+        color: #174ea6;
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-weight: 900;
+        white-space: nowrap;
+    }
+
+    .status-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-weight: 900;
+        font-size: 0.86rem;
+        white-space: nowrap;
+    }
+
+    .status-available {
+        background: #e9fbf7;
+        color: #12937c;
+    }
+
+    .status-busy {
+        background: #fde8e7;
+        color: #b42318;
+    }
+
+    .action-group {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .empty-management {
+        background: #ffffff;
+        border: 1px solid #dbe8f4;
+        border-radius: 28px;
+        padding: 42px;
+        text-align: center;
+        box-shadow: 0 18px 44px rgba(21, 64, 105, 0.09);
+    }
+
+    .empty-management h4 {
+        color: #102a43;
+        font-weight: 950;
+        margin-bottom: 10px;
+    }
+
+    .empty-management p {
+        color: #60758a;
+        margin-bottom: 22px;
+    }
+
+    @@media (max-width: 900px) {
+        .management-header {
+            padding: 28px;
+        }
+
+        .management-table-card {
+            overflow-x: auto;
+        }
+
+        .management-table {
+            min-width: 1050px;
+        }
+    }
+</style>
+
+<section class="management-page">
+    <div class="management-header">
+        <h1>Seans Yönetimi</h1>
+
+        <p>
+            Admin paneli üzerinden doktorlara ait tarih ve saat aralıkları yönetilir.
+            Hasta tarafında yalnızca müsait durumdaki seanslar randevu almak için görüntülenir.
+        </p>
+    </div>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <div class="management-toolbar">
+        <div class="summary-group">
+            <div class="management-summary">
+                Toplam seans:
+                <strong>@totalSessions</strong>
+            </div>
+
+            <div class="management-summary">
+                Müsait:
+                <strong>@availableSessions</strong>
+            </div>
+
+            <div class="management-summary">
+                Dolu:
+                <strong>@busySessions</strong>
+            </div>
+        </div>
+
+        <a asp-action="Create" class="btn btn-primary">
+            Yeni Seans Ekle
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="empty-management">
+            <h4>Henüz seans kaydı bulunmamaktadır.</h4>
+
+            <p>
+                Doktorlara ait tarih ve saat aralıkları oluşturarak hasta randevu alma sürecini başlatabilirsiniz.
+            </p>
+
+            <a asp-action="Create" class="btn btn-primary">
+                Seans Ekle
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="management-table-card">
+            <table class="management-table">
+                <thead>
+                    <tr>
+                        <th>Doktor</th>
+                        <th>Branş</th>
+                        <th>Tarih</th>
+                        <th>Başlangıç</th>
+                        <th>Bitiş</th>
+                        <th>Durum</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var session in Model)
+                    {
+                        <tr>
+                            <td class="name-cell">
+                                @(session.Doctor?.FullName ?? "-")
+                            </td>
+
+                            <td>
+                                <span class="department-pill">
+                                    @(session.Doctor?.Department?.Name ?? "-")
+                                </span>
+                            </td>
+
+                            <td class="muted-cell">
+                                @session.SessionDate.ToString("dd.MM.yyyy")
+                            </td>
+
+                            <td class="muted-cell">
+                                @session.StartTime.ToString(@"hh\:mm")
+                            </td>
+
+                            <td class="muted-cell">
+                                @session.EndTime.ToString(@"hh\:mm")
+                            </td>
+
+                            <td>
+                                @if (session.IsAvailable)
+                                {
+                                    <span class="status-pill status-available">
+                                        Müsait
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-pill status-busy">
+                                        Dolu
+                                    </span>
+                                }
+                            </td>
+
+                            <td>
+                                <div class="action-group">
+                                    <a asp-action="Details"
+                                       asp-route-id="@session.Id"
+                                       class="btn btn-info btn-sm">
+                                        Detay
+                                    </a>
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@session.Id"
+                                       class="btn btn-warning btn-sm">
+                                        Düzenle
+                                    </a>
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@session.Id"
+                                       class="btn btn-danger btn-sm">
+                                        Sil
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>

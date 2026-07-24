@@ -1,0 +1,153 @@
+﻿@using Microsoft.AspNetCore.Http
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Beykent Medikal</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/BeykentHospitalAppointment.styles.css" asp-append-version="true" />
+</head>
+
+<body>
+    @{
+        var userFullName = Context.Session.GetString("UserFullName");
+        var userRole = Context.Session.GetString("UserRole");
+    }
+
+    <header>
+        <nav class="navbar navbar-expand-xl navbar-light bg-white">
+            <div class="container">
+                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
+                    Beykent Medikal
+                </a>
+
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#mainNavbar"
+                        aria-controls="mainNavbar"
+                        aria-expanded="false"
+                        aria-label="Menüyü aç/kapat">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-xl-0">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">
+                                Ana Sayfa
+                            </a>
+                        </li>
+
+                        @if (userRole == "Patient")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="PatientAppointments" asp-action="ChooseDepartment">
+                                    Randevu Al
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="PatientAppointments" asp-action="Index">
+                                    Randevularım
+                                </a>
+                            </li>
+                        }
+
+                        @if (userRole == "Admin")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Admin" asp-action="Index">
+                                    Admin Panel
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Departments" asp-action="Index">
+                                    Branşlar
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Doctors" asp-action="Index">
+                                    Doktorlar
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="DoctorSessions" asp-action="Index">
+                                    Seanslar
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="PatientAppointments" asp-action="Index">
+                                    Tüm Randevular
+                                </a>
+                            </li>
+                        }
+                    </ul>
+
+                    <ul class="navbar-nav ms-auto mb-2 mb-xl-0 account-menu">
+                        @if (string.IsNullOrEmpty(userFullName))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Login">
+                                    Giriş Yap
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link register-link" asp-controller="Account" asp-action="Register">
+                                    Kayıt Ol
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <span class="nav-link user-name">
+                                    Merhaba, @userFullName
+                                    @if (userRole == "Admin")
+                                    {
+                                        <span>(Admin)</span>
+                                    }
+                                </span>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link logout-link" asp-controller="Account" asp-action="Logout">
+                                    Çıkış Yap
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2026 - Beykent Medikal Randevu Sistemi
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

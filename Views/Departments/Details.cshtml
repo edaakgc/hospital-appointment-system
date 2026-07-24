@@ -1,0 +1,143 @@
+@model BeykentHospitalAppointment.Models.Department
+
+@{
+    ViewData["Title"] = "Branş Detayı";
+}
+
+<style>
+    .detail-page {
+        padding: 34px 0 20px;
+    }
+
+    .detail-header {
+        background: linear-gradient(135deg, #0f2d4a 0%, #174ea6 100%);
+        color: white;
+        border-radius: 30px;
+        padding: 34px;
+        box-shadow: 0 24px 60px rgba(21, 64, 105, 0.16);
+        margin-bottom: 24px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .detail-header::before {
+        content: "";
+        position: absolute;
+        width: 230px;
+        height: 230px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 50%;
+        right: -80px;
+        top: -80px;
+    }
+
+    .detail-header h1 {
+        color: white;
+        margin: 0 0 10px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .detail-header p {
+        color: #d9e8ff;
+        margin: 0;
+        line-height: 1.65;
+        max-width: 760px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .detail-card-modern {
+        background: #ffffff;
+        border: 1px solid #dbe8f4;
+        border-radius: 28px;
+        box-shadow: 0 18px 44px rgba(21, 64, 105, 0.09);
+        padding: 34px;
+        max-width: 820px;
+    }
+
+    .detail-row-modern {
+        display: grid;
+        grid-template-columns: 210px 1fr;
+        gap: 18px;
+        padding: 18px 0;
+        border-bottom: 1px solid #edf3f8;
+    }
+
+    .detail-row-modern:last-child {
+        border-bottom: none;
+    }
+
+    .detail-label {
+        color: #102a43;
+        font-weight: 950;
+    }
+
+    .detail-value {
+        color: #60758a;
+        font-weight: 700;
+        line-height: 1.6;
+    }
+
+    .detail-name {
+        color: #174ea6;
+        font-weight: 950;
+    }
+
+    .detail-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 26px;
+    }
+
+    @@media (max-width: 768px) {
+        .detail-card-modern {
+            padding: 26px;
+        }
+
+        .detail-row-modern {
+            grid-template-columns: 1fr;
+            gap: 6px;
+        }
+
+        .detail-header {
+            padding: 28px;
+        }
+    }
+</style>
+
+<section class="detail-page">
+    <div class="detail-header">
+        <h1>Branş Detayı</h1>
+
+        <p>
+            Seçilen branşa ait kayıt bilgileri aşağıda görüntülenmektedir.
+        </p>
+    </div>
+
+    <div class="detail-card-modern">
+        <div class="detail-row-modern">
+            <div class="detail-label">Branş Adı</div>
+            <div class="detail-value detail-name">@Model.Name</div>
+        </div>
+
+        <div class="detail-row-modern">
+            <div class="detail-label">Açıklama</div>
+            <div class="detail-value">@Model.Description</div>
+        </div>
+
+        <div class="detail-actions">
+            <a asp-action="Edit"
+               asp-route-id="@Model.Id"
+               class="btn btn-warning">
+                Düzenle
+            </a>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+                Listeye Dön
+            </a>
+        </div>
+    </div>
+</section>

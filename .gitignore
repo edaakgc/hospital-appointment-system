@@ -1,0 +1,14 @@
+# .NET build files
+bin/
+obj/
+
+# Local configuration / secrets
+appsettings.json
+
+# macOS
+.DS_Store
+
+# IDE
+.vs/
+.vscode/
+.idea/

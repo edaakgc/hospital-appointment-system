@@ -1,0 +1,506 @@
+@using Microsoft.AspNetCore.Http
+
+@{
+    ViewData["Title"] = "Ana Sayfa";
+
+    var userFullName = Context.Session.GetString("UserFullName");
+    var userRole = Context.Session.GetString("UserRole");
+}
+
+<style>
+    .home-page {
+        padding: 42px 0 20px;
+    }
+
+    .home-hero {
+        background: #ffffff;
+        border: 1px solid #dbe8f4;
+        border-radius: 34px;
+        overflow: hidden;
+        box-shadow: 0 28px 70px rgba(21, 64, 105, 0.13);
+    }
+
+    .home-hero-grid {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        min-height: 520px;
+    }
+
+    .home-hero-left {
+        padding: 58px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .home-badge {
+        display: inline-block;
+        width: fit-content;
+        background: #e9f2ff;
+        color: #174ea6;
+        padding: 9px 17px;
+        border-radius: 999px;
+        font-weight: 900;
+        margin-bottom: 22px;
+    }
+
+    .home-title {
+        color: #102a43;
+        font-size: 3.3rem;
+        line-height: 1.08;
+        font-weight: 950;
+        letter-spacing: -1.6px;
+        margin-bottom: 20px;
+    }
+
+    .home-description {
+        color: #60758a;
+        font-size: 1.12rem;
+        line-height: 1.75;
+        max-width: 650px;
+        margin-bottom: 32px;
+    }
+
+    .home-actions {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+    }
+
+    .home-primary-btn {
+        background: #174ea6;
+        color: white;
+        text-decoration: none;
+        padding: 15px 26px;
+        border-radius: 16px;
+        font-weight: 900;
+        box-shadow: 0 16px 30px rgba(23, 78, 166, 0.22);
+        transition: 0.2s ease;
+    }
+
+    .home-primary-btn:hover {
+        background: #123f86;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .home-secondary-btn {
+        background: #eef5ff;
+        color: #174ea6;
+        text-decoration: none;
+        padding: 15px 26px;
+        border-radius: 16px;
+        font-weight: 900;
+        border: 1px solid #d7e6f5;
+        transition: 0.2s ease;
+    }
+
+    .home-secondary-btn:hover {
+        background: #dcecff;
+        color: #123f86;
+        transform: translateY(-2px);
+    }
+
+    .home-hero-right {
+        background: linear-gradient(135deg, #0f2d4a 0%, #174ea6 100%);
+        color: white;
+        padding: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .home-hero-right::before {
+        content: "";
+        position: absolute;
+        width: 290px;
+        height: 290px;
+        background: rgba(255, 255, 255, 0.09);
+        border-radius: 50%;
+        top: -95px;
+        right: -95px;
+    }
+
+    .home-hero-right::after {
+        content: "";
+        position: absolute;
+        width: 230px;
+        height: 230px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 50%;
+        bottom: -80px;
+        left: -80px;
+    }
+
+    .appointment-preview {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        color: #102a43;
+        border-radius: 28px;
+        padding: 30px;
+        box-shadow: 0 24px 55px rgba(0, 0, 0, 0.22);
+    }
+
+    .appointment-preview h3 {
+        font-weight: 950;
+        color: #174ea6;
+        margin-bottom: 20px;
+    }
+
+    .preview-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 14px 0;
+        border-bottom: 1px solid #e3edf7;
+    }
+
+    .preview-row span:first-child {
+        color: #60758a;
+        font-weight: 800;
+    }
+
+    .preview-row span:last-child {
+        color: #102a43;
+        font-weight: 900;
+        text-align: right;
+    }
+
+    .preview-status {
+        margin-top: 22px;
+        background: #e9fbf7;
+        color: #12937c;
+        border: 1px solid #bcefe3;
+        border-radius: 18px;
+        padding: 15px;
+        text-align: center;
+        font-weight: 900;
+    }
+
+    .home-info-grid {
+        margin-top: 28px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+    }
+
+    .home-info-card {
+        background: #ffffff;
+        border: 1px solid #dbe8f4;
+        border-radius: 26px;
+        padding: 28px;
+        box-shadow: 0 18px 44px rgba(21, 64, 105, 0.09);
+        transition: 0.2s ease;
+    }
+
+    .home-info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 24px 55px rgba(21, 64, 105, 0.13);
+    }
+
+    .home-info-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 18px;
+        background: #e9f2ff;
+        color: #174ea6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 18px;
+    }
+
+    .home-info-card h5 {
+        color: #102a43;
+        font-weight: 950;
+        margin-bottom: 10px;
+    }
+
+    .home-info-card p {
+        color: #60758a;
+        line-height: 1.65;
+        margin-bottom: 0;
+    }
+
+    .admin-home-card {
+        background: #ffffff;
+        border: 1px solid #dbe8f4;
+        border-radius: 30px;
+        padding: 34px;
+        box-shadow: 0 18px 44px rgba(21, 64, 105, 0.09);
+        height: 100%;
+    }
+
+    .admin-home-card h4 {
+        color: #102a43;
+        font-weight: 950;
+        margin-bottom: 12px;
+    }
+
+    .guest-box {
+        max-width: 850px;
+        margin: 70px auto;
+        text-align: center;
+        background: #ffffff;
+        border: 1px solid #dbe8f4;
+        border-radius: 34px;
+        padding: 58px;
+        box-shadow: 0 28px 70px rgba(21, 64, 105, 0.13);
+    }
+
+    .guest-box h1 {
+        color: #102a43;
+        font-weight: 950;
+        letter-spacing: -1px;
+    }
+
+    .guest-box p {
+        color: #60758a;
+        line-height: 1.7;
+    }
+
+    @@media (max-width: 950px) {
+        .home-hero-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .home-title {
+            font-size: 2.35rem;
+        }
+
+        .home-hero-left,
+        .home-hero-right {
+            padding: 34px;
+        }
+
+        .home-info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .guest-box {
+            padding: 36px;
+            margin-top: 40px;
+        }
+    }
+</style>
+
+@if (userRole == "Admin")
+{
+    <section class="home-page">
+        <div class="text-center mb-5">
+            <span class="home-badge">Admin Panel</span>
+
+            <h1 class="home-title">
+                Beykent Medikal Yönetim Paneli
+            </h1>
+
+            <p class="home-description mx-auto">
+                Merhaba, @userFullName. Bu panel üzerinden hastane branşlarını, doktorları,
+                seansları ve hasta randevularını yönetebilirsiniz.
+            </p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="admin-home-card">
+                    <h4>Branş Yönetimi</h4>
+
+                    <p class="text-muted">
+                        Hastanede bulunan branşları görüntüleyebilir, yeni branş ekleyebilir,
+                        mevcut branşları düzenleyebilir veya silebilirsiniz.
+                    </p>
+
+                    <a asp-controller="Departments"
+                       asp-action="Index"
+                       class="btn btn-primary">
+                        Branşları Yönet
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="admin-home-card">
+                    <h4>Doktor Yönetimi</h4>
+
+                    <p class="text-muted">
+                        Doktor kayıtlarını görüntüleyebilir, yeni doktor ekleyebilir,
+                        doktor bilgilerini düzenleyebilir veya silebilirsiniz.
+                    </p>
+
+                    <a asp-controller="Doctors"
+                       asp-action="Index"
+                       class="btn btn-primary">
+                        Doktorları Yönet
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="admin-home-card">
+                    <h4>Seans Yönetimi</h4>
+
+                    <p class="text-muted">
+                        Doktorlara ait müsait tarih ve saat seanslarını ekleyebilir,
+                        düzenleyebilir veya silebilirsiniz.
+                    </p>
+
+                    <a asp-controller="DoctorSessions"
+                       asp-action="Index"
+                       class="btn btn-primary">
+                        Seansları Yönet
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="admin-home-card">
+                    <h4>Randevu Takibi</h4>
+
+                    <p class="text-muted">
+                        Hastalar tarafından alınan tüm randevuları görüntüleyebilirsiniz.
+                        Admin randevu oluşturamaz, sadece takip eder.
+                    </p>
+
+                    <a asp-controller="PatientAppointments"
+                       asp-action="Index"
+                       class="btn btn-primary">
+                        Tüm Randevuları Gör
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+else if (userRole == "Patient")
+{
+    <section class="home-page">
+        <div class="home-hero">
+            <div class="home-hero-grid">
+                <div class="home-hero-left">
+                    <span class="home-badge">Beykent Medikal Online Randevu</span>
+
+                    <h1 class="home-title">
+                        Sağlık randevunuzu kolayca planlayın.
+                    </h1>
+
+                    <p class="home-description">
+                        Branşınızı seçin, doktorunuzu belirleyin, size uygun seansı görüntüleyin
+                        ve ödeme tercihinizi seçerek randevunuzu birkaç adımda tamamlayın.
+                    </p>
+
+                    <div class="home-actions">
+                        <a asp-controller="PatientAppointments"
+                           asp-action="ChooseDepartment"
+                           class="home-primary-btn">
+                            Randevu Al
+                        </a>
+
+                        <a asp-controller="PatientAppointments"
+                           asp-action="Index"
+                           class="home-secondary-btn">
+                            Randevularım
+                        </a>
+                    </div>
+                </div>
+
+                <div class="home-hero-right">
+                    <div class="appointment-preview">
+                        <h3>Randevu Akışı</h3>
+
+                        <div class="preview-row">
+                            <span>1. Adım</span>
+                            <span>Branş Seçimi</span>
+                        </div>
+
+                        <div class="preview-row">
+                            <span>2. Adım</span>
+                            <span>Doktor Seçimi</span>
+                        </div>
+
+                        <div class="preview-row">
+                            <span>3. Adım</span>
+                            <span>Seans Seçimi</span>
+                        </div>
+
+                        <div class="preview-row">
+                            <span>4. Adım</span>
+                            <span>Ödeme Tercihi</span>
+                        </div>
+
+                        <div class="preview-status">
+                            Müsait seanslar anlık olarak listelenir.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="home-info-grid">
+            <div class="home-info-card">
+                <div class="home-info-icon">🏥</div>
+
+                <h5>Branş Seçimi</h5>
+
+                <p>
+                    Kardiyoloji, Göz Hastalıkları, Dahiliye, Ortopedi ve Dermatoloji gibi
+                    branşlar arasından seçim yapabilirsiniz.
+                </p>
+            </div>
+
+            <div class="home-info-card">
+                <div class="home-info-icon">👩‍⚕️</div>
+
+                <h5>Doktor ve Seans</h5>
+
+                <p>
+                    Seçtiğiniz branşa göre doktorları görebilir ve yalnızca müsait
+                    randevu saatlerini görüntüleyebilirsiniz.
+                </p>
+            </div>
+
+            <div class="home-info-card">
+                <div class="home-info-icon">💳</div>
+
+                <h5>Ödeme Seçeneği</h5>
+
+                <p>
+                    Randevunuzu oluştururken online ödeme veya hastanede ödeme
+                    seçeneklerinden birini tercih edebilirsiniz.
+                </p>
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    <div class="guest-box">
+        <span class="home-badge">Beykent Medikal</span>
+
+        <h1 class="display-5">
+            Online Hastane Randevu Sistemine Hoş Geldiniz
+        </h1>
+
+        <p class="lead mt-3">
+            Randevu alabilmek için hasta hesabınızla giriş yapabilir veya yeni hesap oluşturabilirsiniz.
+        </p>
+
+        <div class="home-actions justify-content-center mt-4">
+            <a asp-controller="Account"
+               asp-action="Login"
+               class="home-primary-btn">
+                Giriş Yap
+            </a>
+
+            <a asp-controller="Account"
+               asp-action="Register"
+               class="home-secondary-btn">
+                Kayıt Ol
+            </a>
+        </div>
+    </div>
+}

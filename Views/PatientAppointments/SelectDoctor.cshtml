@@ -1,0 +1,44 @@
+@model IEnumerable<BeykentHospitalAppointment.Models.Doctor>
+
+@{
+    ViewData["Title"] = "Doktor Seç";
+}
+
+<h1>Doktor Seç</h1>
+
+<p class="text-muted">
+    Seçilen branş: <strong>@ViewBag.DepartmentName</strong>
+</p>
+
+<a asp-action="ChooseDepartment" class="btn btn-secondary mb-3">Branşlara Geri Dön</a>
+
+<div class="row">
+    @foreach (var doctor in Model)
+    {
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">@doctor.FullName</h5>
+
+                    <p class="card-text">
+                        <strong>Uzmanlık:</strong> @doctor.Specialty
+                    </p>
+
+                    <p class="card-text">
+                        @doctor.Description
+                    </p>
+
+                    <p class="card-text">
+                        <strong>Muayene Ücreti:</strong> @doctor.ExaminationFee TL
+                    </p>
+
+                    <a asp-action="SelectSession"
+                       asp-route-doctorId="@doctor.Id"
+                       class="btn btn-primary">
+                        Bu Doktoru Seç
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
